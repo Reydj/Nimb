@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-350 -70 700 140" width="700" height="140">
+  <rect x="-345" y="-66" width="690" height="132" rx="66" fill="#FF4D5E" fill-opacity="0.92" stroke="#FF4D5E" stroke-width="4"/>
+  <g id="x" transform="translate(-271 0) rotate(0) scale(1)"><ellipse cx="0" cy="0" rx="28" ry="28" fill="none" stroke="#FFFFFF" stroke-width="5"/>
+  <path d="M-10 -10 C-10 -10 10 10 10 10" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M10 -10 C10 -10 -10 10 -10 10" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <text x="-219" y="21.46" font-family="Inter Display, Inter, sans-serif" font-weight="800" font-size="52" fill="#FFFFFF" text-anchor="start">End conversation</text>
+</svg>

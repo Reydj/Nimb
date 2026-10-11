@@ -1,13 +1,14 @@
 # Шортс «AI может завершить чат при оскорблениях»
 
-Вертикальный ролик 1080×1920, 30 fps, 47,5 с. Плоская 2D-графика, палитра и шрифт по ТЗ
+Вертикальный ролик 1080×1920, 30 fps, 45,4 с. Плоская 2D-графика, палитра и шрифт по ТЗ
 (Inter Display Black / ExtraBold), субтитры по 2–4 слова с жёлтой подсветкой текущего слова.
 
 ## Что лежит в папке
 
 | Файл | Что это |
 |---|---|
-| `out/ai-ends-chat.mp4` | готовое видео: графика, субтитры, звуковые эффекты (без голоса и музыки) |
+| `out/ai-ends-chat.mp4` | готовое видео: графика, субтитры, голос и звуковые эффекты (без музыки) |
+| `out/ae-project.zip` | проект для After Effects 2022 и SVG всех элементов |
 | `out/sfx.wav` | отдельная дорожка эффектов (поп, вуш, дзинь, удар, глитч) |
 | `out/subtitles.srt` | субтитры с таймкодами (на случай, если нужны отдельно) |
 | `out/vo-timing.txt` | тайминг озвучки: какую фразу на какой секунде начинать |
@@ -26,28 +27,18 @@ npx serve .            # или любой статический сервер
 
 ## Озвучка
 
-Субтитры и анимация привязаны к таймингу из `out/vo-timing.txt`:
+Голос лежит в `audio/voice.wav`. Пословный тайминг получен распознаванием речи (forced
+alignment) и записан в `timing.js`. По нему выставлены субтитры, подсветка слов и вся
+анимация, а `render.mjs` подмешивает голос в MP4 автоматически.
 
-```
-00:00:00,300 – 00:00:05,600  For years, a chatbot was the one thing you could insult without worrying about getting hit.
-00:00:05,900 – 00:00:09,500  It would probably just apologize or ask you to calm down.
-00:00:09,900 – 00:00:11,800  But that might be changing.
-00:00:12,300 – 00:00:19,800  Anthropic has given some of its Claude models the ability to end a conversation in rare, extreme cases of persistent abuse.
-00:00:20,200 – 00:00:25,100  It only happens after the AI has tried to steer the chat somewhere else.
-00:00:25,600 – 00:00:31,600  After that, you can’t send more messages in that chat, but you can start a new one.
-00:00:32,200 – 00:00:35,500  Anthropic says it’s part of its research into AI welfare.
-00:00:36,000 – 00:00:39,900  So if you snap at a chatbot once or twice, nothing happens.
-00:00:40,700 – 00:00:44,100  But keep going, and it might simply say goodbye.
-```
+Если перезаписать голос, нужно заново получить тайминг слов, обновить `timing.js` и
+перерендерить ролик. Остальное подстроится само: все сцены считаются от начала и конца фраз.
 
-Два способа:
+## After Effects
 
-1. **Подогнать голос под видео.** Сгенерировать каждую фразу отдельно и поставить её в
-   редакторе на указанный таймкод. Если фраза выходит длиннее окна, ускорить её на 5–10 %.
-2. **Подогнать видео под голос.** Записать голос целиком, посмотреть, где начинается и
-   заканчивается каждая фраза, и поправить `s` / `e` в массиве `VO` в начале `scene.js`.
-   Вся анимация и подсветка слов привязаны к этим числам и сдвинутся сами. Потом
-   перерендерить (см. ниже) с `--voice`, и голос сразу смешается с эффектами.
+`out/ae-project.zip` — проект для AE 2022: скрипт `build_short.jsx`, который сам
+собирает композиции, слои и ключевые кадры, плюс шрифты, звук и SVG всех элементов.
+Подробности в `ae/README.md`.
 
 ## Рендер
 
@@ -56,8 +47,8 @@ npx serve .            # или любой статический сервер
 ```bash
 npm install
 npx playwright install chromium          # один раз
-node render.mjs --channel "@mychannel"   # видео + эффекты
-node render.mjs --channel "@mychannel" --voice vo.wav --music lofi.mp3
+node render.mjs --channel "@mychannel"                     # видео + голос + эффекты
+node render.mjs --channel "@mychannel" --music lofi.mp3    # плюс музыка
 ```
 
 `--music` ставит подложку на 15 % громкости и делает затухание в конце.

@@ -1,9 +1,9 @@
-00:00:00,300 – 00:00:05,600  For years, a chatbot was the one thing you could insult without worrying about getting hit.
-00:00:05,900 – 00:00:09,500  It would probably just apologize or ask you to calm down.
-00:00:09,900 – 00:00:11,800  But that might be changing.
-00:00:12,300 – 00:00:19,800  Anthropic has given some of its Claude models the ability to end a conversation in rare, extreme cases of persistent abuse.
-00:00:20,200 – 00:00:25,100  It only happens after the AI has tried to steer the chat somewhere else.
-00:00:25,600 – 00:00:31,600  After that, you can’t send more messages in that chat, but you can start a new one.
-00:00:32,200 – 00:00:35,500  Anthropic says it’s part of its research into AI welfare.
-00:00:36,000 – 00:00:39,900  So if you snap at a chatbot once or twice, nothing happens.
-00:00:40,700 – 00:00:44,100  But keep going, and it might simply say goodbye.
+00:00:00,160 – 00:00:05,530  For years, a chatbot was the one thing you could insult without worrying about getting hit.
+00:00:05,620 – 00:00:09,460  It would probably just apologize or ask you to calm down.
+00:00:09,510 – 00:00:11,180  But that might be changing.
+00:00:11,310 – 00:00:20,010  Anthropic has given some of its Claude models the ability to end a conversation in rare, extreme cases of persistent abuse.
+00:00:20,090 – 00:00:24,660  It only happens after the AI has tried to steer the chat somewhere else.
+00:00:24,730 – 00:00:30,080  After that, you can’t send more messages in that chat, but you can start a new one.
+00:00:30,150 – 00:00:34,200  Anthropic says it’s part of its research into AI welfare.
+00:00:34,330 – 00:00:38,530  So if you snap at a chatbot once or twice, nothing happens.
+00:00:38,610 – 00:00:41,960  But keep going, and it might simply say goodbye.

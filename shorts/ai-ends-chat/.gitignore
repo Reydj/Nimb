@@ -2,3 +2,5 @@ node_modules/
 out/still-*.png
 out/video-only.mp4
 out/sfx-cues.json
+ae/footage/*.wav
+ae/fonts/

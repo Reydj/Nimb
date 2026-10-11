@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-110 -150 220 260" width="220" height="260">
+  <path d="M0 -95 C0 -95 0 -122 0 -122" fill="none" stroke="#3DDCFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-128" rx="13" ry="13" fill="#FFD93D"/>
+  <ellipse cx="0" cy="0" rx="100" ry="100" fill="#2FB6EE"/>
+  <ellipse cx="-32" cy="-50" rx="42" ry="26" fill="#8BEDFF" fill-opacity="0.45"/>
+  <rect x="-70" y="-46" width="140" height="98" rx="42" fill="#091028"/>
+  <g id="face_smile" transform="translate(0 0) rotate(0) scale(1)" opacity="0"><rect x="-37.5" y="-18" width="15" height="24" rx="7" fill="#C6F6FF"/>
+  <rect x="22.5" y="-18" width="15" height="24" rx="7" fill="#C6F6FF"/>
+  <path d="M16.18 21.76 C12.42 26.94 6.4 30 0 30 C-6.4 30 -12.42 26.94 -16.18 21.76" fill="none" stroke="#C6F6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <g id="face_calm" transform="translate(0 0) rotate(0) scale(1)"><path d="M-42.36 -4.02 C-40.62 -9.37 -35.63 -13 -30 -13 C-24.37 -13 -19.38 -9.37 -17.64 -4.02" fill="none" stroke="#C6F6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M17.64 -4.02 C19.38 -9.37 24.37 -13 30 -13 C35.63 -13 40.62 -9.37 42.36 -4.02" fill="none" stroke="#C6F6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16.18 21.76 C12.42 26.94 6.4 30 0 30 C-6.4 30 -12.42 26.94 -16.18 21.76" fill="none" stroke="#C6F6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <g id="face_flat" transform="translate(0 0) rotate(0) scale(1)" opacity="0"><rect x="-37.5" y="-18" width="15" height="24" rx="7" fill="#C6F6FF"/>
+  <rect x="22.5" y="-18" width="15" height="24" rx="7" fill="#C6F6FF"/>
+  <path d="M-16 26 C-16 26 16 26 16 26" fill="none" stroke="#C6F6FF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></g>
+</svg>

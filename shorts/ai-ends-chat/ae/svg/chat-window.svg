@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 864 614" width="864" height="614">
+  <rect x="0" y="0" width="860" height="610" rx="46" fill="#131A38" fill-opacity="0.96" stroke="#FFFFFF" stroke-width="2" stroke-opacity="0.13"/>
+  <rect x="32" y="112" width="796" height="2" rx="0" fill="#FFFFFF" fill-opacity="0.07"/>
+  <g id="avatar" transform="translate(72 62) rotate(0) scale(1)"><path d="M0 -31.35 C0 -31.35 0 -40.26 0 -40.26" fill="none" stroke="#3DDCFF" stroke-width="2.97" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-42.24" rx="4.29" ry="4.29" fill="#FFD93D"/>
+  <ellipse cx="0" cy="0" rx="33" ry="33" fill="#2FB6EE"/>
+  <ellipse cx="-10.56" cy="-16.5" rx="13.86" ry="8.58" fill="#8BEDFF" fill-opacity="0.45"/>
+  <rect x="-23.1" y="-15.18" width="46.2" height="32.34" rx="13.86" fill="#091028"/>
+  <g id="face_smile" transform="translate(0 0) rotate(0) scale(1)"><rect x="-12.38" y="-5.94" width="4.95" height="7.92" rx="2.31" fill="#C6F6FF"/>
+  <rect x="7.43" y="-5.94" width="4.95" height="7.92" rx="2.31" fill="#C6F6FF"/>
+  <path d="M5.34 7.18 C4.1 8.89 2.11 9.9 0 9.9 C-2.11 9.9 -4.1 8.89 -5.34 7.18" fill="none" stroke="#C6F6FF" stroke-width="2.97" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <g id="face_calm" transform="translate(0 0) rotate(0) scale(1)" opacity="0"><path d="M-13.98 -1.33 C-13.41 -3.09 -11.76 -4.29 -9.9 -4.29 C-8.04 -4.29 -6.39 -3.09 -5.82 -1.33" fill="none" stroke="#C6F6FF" stroke-width="2.97" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M5.82 -1.33 C6.39 -3.09 8.04 -4.29 9.9 -4.29 C11.76 -4.29 13.41 -3.09 13.98 -1.33" fill="none" stroke="#C6F6FF" stroke-width="2.97" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M5.34 7.18 C4.1 8.89 2.11 9.9 0 9.9 C-2.11 9.9 -4.1 8.89 -5.34 7.18" fill="none" stroke="#C6F6FF" stroke-width="2.97" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <g id="face_flat" transform="translate(0 0) rotate(0) scale(1)" opacity="0"><rect x="-12.38" y="-5.94" width="4.95" height="7.92" rx="2.31" fill="#C6F6FF"/>
+  <rect x="7.43" y="-5.94" width="4.95" height="7.92" rx="2.31" fill="#C6F6FF"/>
+  <path d="M-5.28 8.58 C-5.28 8.58 5.28 8.58 5.28 8.58" fill="none" stroke="#C6F6FF" stroke-width="2.97" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+  <text x="128" y="56.07" font-family="Inter, Inter, sans-serif" font-weight="700" font-size="34" fill="#FFFFFF" text-anchor="start">AI Assistant</text>
+  <ellipse cx="136" cy="80" rx="6" ry="6" fill="#3DDCFF"/>
+  <text x="152" y="89.52" font-family="Inter, Inter, sans-serif" font-weight="600" font-size="24" fill="#FFFFFF" fill-opacity="0.55" text-anchor="start">online</text>
+  <rect x="24" y="494" width="812" height="92" rx="46" fill="#FFFFFF" fill-opacity="0.07" stroke="#FFFFFF" stroke-width="2.5" stroke-opacity="0.1"/>
+  <text x="64" y="552.36" font-family="Inter, Inter, sans-serif" font-weight="600" font-size="32" fill="#FFFFFF" fill-opacity="0.4" text-anchor="start">Type a message…</text>
+  <g id="send" transform="translate(790 540) rotate(0) scale(1)"><ellipse cx="0" cy="0" rx="32" ry="32" fill="#3DDCFF"/>
+  <path d="M0 13 C0 13 0 -13 0 -13" fill="none" stroke="#0E1325" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M-11 -3 C-11 -3 0 -14 0 -14 C0 -14 11 -3 11 -3" fill="none" stroke="#0E1325" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>
+</svg>

@@ -2,7 +2,7 @@
 //
 //   node render.mjs                         -> out/ai-ends-chat.mp4 (+ sfx.wav, subtitles.srt, vo-timing.txt)
 //   node render.mjs --channel "@mychannel"  -> channel name on the end card
-//   node render.mjs --voice vo.wav          -> mixes a recorded voice-over in
+//   node render.mjs --voice vo.wav          -> mixes a voice-over in (default: audio/voice.wav, --no-voice to skip)
 //   node render.mjs --music music.mp3       -> mixes a music bed at ~15 % of the voice level
 //   node render.mjs --stills 3,12.5,26      -> PNG frames only, for checking
 import { chromium } from 'playwright';
@@ -11,6 +11,7 @@ import { createServer } from 'node:http';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { dirname, join, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 const OUT = join(ROOT, 'out');
@@ -18,6 +19,8 @@ const args = Object.fromEntries(process.argv.slice(2).reduce((a, v, i, all) => {
   if (v.startsWith('--')) a.push([v.slice(2), all[i + 1] && !all[i + 1].startsWith('--') ? all[i + 1] : true]);
   return a;
 }, []));
+
+if (!args.voice && !args['no-voice'] && existsSync(join(ROOT, 'audio/voice.wav'))) args.voice = join(ROOT, 'audio/voice.wav');
 
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.otf': 'font/otf' };
 const server = createServer(async (req, res) => {

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-230 -280 460 550" width="460" height="550">
+  <rect x="-210" y="-250" width="420" height="500" rx="30" fill="#EEF3FF"/>
+  <rect x="-210" y="-250" width="420" height="60" rx="30" fill="#3DDCFF"/>
+  <rect x="-210" y="-222" width="420" height="32" rx="0" fill="#3DDCFF"/>
+  <ellipse cx="-165" cy="-250" rx="11" ry="11" fill="#0E1325"/>
+  <path d="M-165 -268 C-165 -268 -165 -236 -165 -236" fill="none" stroke="#9AA6C4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="-110" cy="-250" rx="11" ry="11" fill="#0E1325"/>
+  <path d="M-110 -268 C-110 -268 -110 -236 -110 -236" fill="none" stroke="#9AA6C4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="-55" cy="-250" rx="11" ry="11" fill="#0E1325"/>
+  <path d="M-55 -268 C-55 -268 -55 -236 -55 -236" fill="none" stroke="#9AA6C4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-250" rx="11" ry="11" fill="#0E1325"/>
+  <path d="M0 -268 C0 -268 0 -236 0 -236" fill="none" stroke="#9AA6C4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="55" cy="-250" rx="11" ry="11" fill="#0E1325"/>
+  <path d="M55 -268 C55 -268 55 -236 55 -236" fill="none" stroke="#9AA6C4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="110" cy="-250" rx="11" ry="11" fill="#0E1325"/>
+  <path d="M110 -268 C110 -268 110 -236 110 -236" fill="none" stroke="#9AA6C4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="165" cy="-250" rx="11" ry="11" fill="#0E1325"/>
+  <path d="M165 -268 C165 -268 165 -236 165 -236" fill="none" stroke="#9AA6C4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <g id="line-1" transform="translate(0 0) rotate(0) scale(1)"><path d="M-170 -40 C-170 -40 130 -40 130 -40" fill="none" stroke="#A9B8DA" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g id="line-2" transform="translate(0 0) rotate(0) scale(1)"><path d="M-170 12 C-170 12 80 12 80 12" fill="none" stroke="#A9B8DA" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g id="line-3" transform="translate(0 0) rotate(0) scale(1)"><path d="M-170 64 C-170 64 150 64 150 64" fill="none" stroke="#3DDCFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g id="line-4" transform="translate(0 0) rotate(0) scale(1)"><path d="M-170 116 C-170 116 40 116 40 116" fill="none" stroke="#A9B8DA" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g id="line-5" transform="translate(0 0) rotate(0) scale(1)"><path d="M-170 168 C-170 168 110 168 110 168" fill="none" stroke="#A9B8DA" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g id="heart" transform="translate(140 200) rotate(0) scale(1)"><path d="M0 22 C-46 -8 -26 -46 0 -22 C26 -46 46 -8 0 22Z" fill="#FF4D5E"/></g>
+  <text x="-170" y="-125.8" font-family="Inter Display, Inter, sans-serif" font-weight="900" font-size="40" fill="#0E1325" text-anchor="start">AI welfare</text>
+  <text x="-170" y="-89.48" font-family="Inter, Inter, sans-serif" font-weight="700" font-size="24" fill="#0E1325" fill-opacity="0.45" text-anchor="start">research notes</text>
+</svg>

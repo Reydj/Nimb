@@ -6,7 +6,7 @@
 (function (global) {
   'use strict';
 
-  const W = 1080, H = 1920, FPS = 30, DURATION = 47.5;
+  const W = 1080, H = 1920, FPS = 30;
   const COL = { bg: '#0E1325', accent: '#3DDCFF', warn: '#FF4D5E', hl: '#FFD93D', text: '#FFFFFF', navy: '#0E1325' };
   const FONT = (w, px) => `${w} ${px}px InterX, "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
 
@@ -51,7 +51,10 @@
   const CHUNKS = [];
   (function buildVO() {
     const PAUSE = 4;
+    const REC = global.VO_WORDS || null;
     for (const L of VO) {
+      const rec = REC && REC.filter(r => r[0] === L.id);
+      if (rec && rec.length) { L.s = rec[0][2]; L.e = rec[rec.length - 1][3]; }
       const groups = L.text.split('|').map(c => c.split(' '));
       const flat = groups.flat();
       const pause = (w, i) => (i < flat.length - 1 && /[,.]$/.test(w) ? PAUSE : 0);
@@ -62,9 +65,10 @@
       for (const g of groups) {
         const chunk = { line: L, words: [] };
         for (const w of g) {
-          const s = L.s + (L.e - L.s) * acc / tot;
+          let s = L.s + (L.e - L.s) * acc / tot;
           acc += wts[idx];
-          const e = L.s + (L.e - L.s) * (acc - pause(w, idx)) / tot;
+          let e = L.s + (L.e - L.s) * (acc - pause(w, idx)) / tot;
+          if (rec && rec[idx]) { s = rec[idx][2]; e = rec[idx][3]; }
           const wd = { w, s, e, key: w.toLowerCase().replace(/[^a-z’']/g, '') };
           chunk.words.push(wd); L.words.push(wd); idx++;
         }
@@ -90,8 +94,19 @@
   const SFX = [];
   const cue = (t, type, vol = 1) => SFX.push({ t: +t.toFixed(3), type, vol });
 
+  const LS = id => VO.find(l => l.id === id).s, LE = id => VO.find(l => l.id === id).e;
+
   // ---------------------------------------------------------------- acts & events
-  const ACTS = { A: [0, 12.1], B: [12.1, 20.0], C: [20.0, 32.3], D: [32.3, 35.9], E: [35.9, 44.5], F: [44.5, DURATION] };
+  const ACTS = {};
+  ACTS.A = [0, LS('l4') - 0.15];
+  ACTS.B = [ACTS.A[1], LS('l5') - 0.15];
+  ACTS.C = [ACTS.B[1], LS('l7') - 0.1];
+  ACTS.D = [ACTS.C[1], LS('l8') - 0.15];
+  ACTS.E = [ACTS.D[1], LE('l9') + 0.45];
+  ACTS.F = [ACTS.E[1], ACTS.E[1] + 3.0];
+  const DURATION = +ACTS.F[1].toFixed(2);
+  // S3 ("But that might be changing") moments, k = 0..1 across the scene
+  const g3 = k => LS('l3') + k * (ACTS.A[1] - LS('l3'));
   const WIN = { x: 110, y: 440, w: 860, h: 610 };
 
   // Act A: insults bounce off, bot apologizes, then the glitch.
@@ -101,21 +116,21 @@
     { side: 'user', kind: 'angry', text: '&%#@!!', t: WT('l1', 'chatbot'), burst: true },
     { side: 'user', kind: 'angry', text: '$#@&?!', t: WT('l1', 'thing'), burst: true },
     { side: 'user', kind: 'angry', text: '#@%!!!', t: WT('l1', 'insult'), burst: true },
-    { side: 'bot', kind: 'typing', t: 5.95, until: WT('l2', 'apologize') },
+    { side: 'bot', kind: 'typing', t: LS('l2') + 0.05, until: WT('l2', 'apologize') },
     { side: 'bot', kind: 'text', text: 'Sorry.', t: WT('l2', 'apologize') },
     { side: 'bot', kind: 'text', text: 'Let’s calm down 🙂', t: WT('l2', 'calm') },
-    { side: 'user', kind: 'angry', text: '#@!$%&!!', t: 9.95 },
-    { side: 'user', kind: 'angry', text: '!!#@$%', t: 10.35 },
-    { side: 'user', kind: 'angry', text: '%$#@!&!', t: 10.7 },
-    { side: 'user', kind: 'angry', text: '#@!!!$%', t: 11.0 },
-    { side: 'user', kind: 'angry', text: '&#@%!!', t: 11.3 },
+    { side: 'user', kind: 'angry', text: '#@!$%&!!', t: g3(0.02) },
+    { side: 'user', kind: 'angry', text: '!!#@$%', t: g3(0.2) },
+    { side: 'user', kind: 'angry', text: '%$#@!&!', t: g3(0.38) },
+    { side: 'user', kind: 'angry', text: '#@!!!$%', t: g3(0.55) },
+    { side: 'user', kind: 'angry', text: '&#@%!!', t: g3(0.72) },
   ];
   const FLOATERS = [
-    { x: 250, y: 560, s: 1.2, r: -0.12, t: 10.0, text: '#@!$!' },
-    { x: 830, y: 620, s: 1.05, r: 0.1, t: 10.25, text: '%&#@!' },
-    { x: 290, y: 930, s: 1.15, r: 0.08, t: 10.55, text: '!!$#@' },
-    { x: 800, y: 980, s: 1.3, r: -0.07, t: 10.85, text: '#@%&!!' },
-    { x: 545, y: 760, s: 1.6, r: 0.03, t: 11.2, text: '$#@!!!' },
+    { x: 250, y: 560, s: 1.2, r: -0.12, t: g3(0.05), text: '#@!$!' },
+    { x: 830, y: 620, s: 1.05, r: 0.1, t: g3(0.17), text: '%&#@!' },
+    { x: 290, y: 930, s: 1.15, r: 0.08, t: g3(0.3), text: '!!$#@' },
+    { x: 800, y: 980, s: 1.3, r: -0.07, t: g3(0.43), text: '#@%&!!' },
+    { x: 545, y: 760, s: 1.6, r: 0.03, t: g3(0.6), text: '$#@!!!' },
   ];
 
   // Act B: Anthropic / Claude / End conversation / severity meter.
@@ -124,13 +139,13 @@
     tR: WT('l4', 'rare'), tP: WT('l4', 'abuse'),
   };
   B.fill = t => 0.93 * eInOut(prog(t, B.tR - 0.35, B.tP + 0.3));
-  B.armAt = (() => { for (let t = B.tR; t < 20; t += 0.01) if (B.fill(t) >= 0.8) return t; return B.tP; })();
+  B.armAt = (() => { for (let t = B.tR; t < ACTS.B[1]; t += 0.01) if (B.fill(t) >= 0.8) return t; return B.tP; })();
 
   // Act C: three redirect attempts, lock, new chat.
-  const C = { lockAt: 25.2, trySend: WT('l6', 'send'), newShow: WT('l6', 'but') - 0.3, press: WT('l6', 'start') - 0.1 };
+  const C = { lockAt: LE('l5') + 0.08, trySend: WT('l6', 'send'), newShow: WT('l6', 'but') - 0.3, press: WT('l6', 'start') - 0.1 };
   C.swap = C.press + 0.15;
   const C_MSGS = [
-    { side: 'user', kind: 'angry', text: '#@!$%!', t: 20.3 },
+    { side: 'user', kind: 'angry', text: '#@!$%!', t: LS('l5') + 0.1 },
     { side: 'bot', kind: 'text', text: 'Let’s talk about something else?', t: WT('l5', 'happens'), badge: 1 },
     { side: 'user', kind: 'angry', text: '&%#@!!', t: WT('l5', 'ai') + 0.1 },
     { side: 'bot', kind: 'text', text: 'How about a fun fact instead?', t: WT('l5', 'steer'), badge: 2 },
@@ -149,7 +164,7 @@
     { side: 'bot', kind: 'text', text: 'No worries. I’m still here 🙂', t: WT('l8', 'nothing') },
   ];
   const FLOOD = ['#@!$%!', '&%#@!!', '$#@&?!', '#@%!!!', '!!#@$', '%$#@!&', '#@!!!$%', '&#@%!!', '$#@!!!', '#@!$%&!!'];
-  FLOOD.forEach((text, i) => E_MSGS.push({ side: 'user', kind: 'angry', text, t: 40.75 + 2.0 * Math.pow(i / (FLOOD.length - 1), 0.8), flood: true }));
+  FLOOD.forEach((text, i) => E_MSGS.push({ side: 'user', kind: 'angry', text, t: LS('l9') + 0.1 + (E.bye - 0.6 - LS('l9')) * Math.pow(i / (FLOOD.length - 1), 0.8), flood: true }));
   E_MSGS.push({ side: 'bot', kind: 'bye', text: 'Goodbye 👋', t: E.bye });
 
   [A_MSGS, C_MSGS, C_NEW, E_MSGS].forEach(list => list.forEach((m, i) => {
@@ -157,7 +172,7 @@
     if (m.kind !== 'typing') cue(m.t, 'pop', m.side === 'bot' ? 0.9 : (m.flood ? 0.6 : 0.8));
   }));
   cue(FIST_T, 'thud', 1);
-  [[9.88, 1], [10.55, 0.6], [11.25, 0.7]].forEach(([t, v]) => cue(t, 'glitch', v));
+  [[g3(0), 1], [g3(0.33), 0.6], [g3(0.66), 0.7]].forEach(([t, v]) => cue(t, 'glitch', v));
   [ACTS.B[0], ACTS.C[0], ACTS.D[0], ACTS.E[0], ACTS.F[0]].forEach(t => cue(t - 0.15, 'whoosh', 0.9));
   cue(B.tE, 'pop', 1); cue(B.armAt, 'pop', 1);
   cue(C.lockAt, 'ding', 1);
@@ -168,8 +183,8 @@
 
   // ---------------------------------------------------------------- global FX
   const IMPULSES = [
-    { t: FIST_T, amp: 26, d: 0.6 }, { t: 9.88, amp: 22, d: 0.5 }, { t: 10.55, amp: 12, d: 0.35 },
-    { t: 11.25, amp: 14, d: 0.35 }, { t: B.armAt, amp: 8, d: 0.4 }, { t: C.lockAt, amp: 14, d: 0.45 },
+    { t: FIST_T, amp: 26, d: 0.6 }, { t: g3(0), amp: 22, d: 0.5 }, { t: g3(0.33), amp: 12, d: 0.35 },
+    { t: g3(0.66), amp: 14, d: 0.35 }, { t: B.armAt, amp: 8, d: 0.4 }, { t: C.lockAt, amp: 14, d: 0.45 },
     { t: E.close, amp: 10, d: 0.4 },
   ];
   function shake(t) {
@@ -179,15 +194,15 @@
       const a = p.amp * Math.exp(-6 * dt / p.d);
       x += a * Math.sin(dt * 58); y += a * Math.cos(dt * 47);
     }
-    const j = 6 * env(t, 41.2, 43.4, 1.2, 0.3);
+    const j = 6 * env(t, LS('l9') + 0.5, E.bye, 1.2, 0.3);
     if (j > 0) { x += j * Math.sin(t * 71); y += j * Math.cos(t * 63); }
     return { x, y };
   }
   function warnAt(t) {
-    return Math.max(env(t, 9.85, 12.2, 0.12, 0.35), 0.85 * env(t, 41.0, 44.2, 1.6, 0.5),
-      0.55 * env(t, C.lockAt - 0.05, C.lockAt + 1.4, 0.1, 0.9), 0.35 * env(t, B.armAt - 0.1, 19.9, 0.2, 0.4));
+    return Math.max(env(t, LS('l3') - 0.05, ACTS.A[1] + 0.1, 0.12, 0.35), 0.85 * env(t, LS('l9') + 0.3, E.close + 0.3, 1.6, 0.5),
+      0.55 * env(t, C.lockAt - 0.05, C.lockAt + 1.4, 0.1, 0.9), 0.35 * env(t, B.armAt - 0.1, ACTS.B[1] - 0.1, 0.2, 0.4));
   }
-  const GLITCHES = [[9.88, 1, 0.38], [10.55, 0.55, 0.2], [11.25, 0.7, 0.25], [11.98, 0.8, 0.2], [41.9, 0.35, 0.15], [42.5, 0.45, 0.18]];
+  const GLITCHES = [[g3(0), 1, 0.38], [g3(0.33), 0.55, 0.2], [g3(0.66), 0.7, 0.25], [ACTS.A[1] - 0.12, 0.8, 0.2], [E.bye - 1.3, 0.35, 0.15], [E.bye - 0.7, 0.45, 0.18]];
   const glitchAt = t => GLITCHES.reduce((g, [s, k, d]) => g + (t >= s ? k * (1 - prog(t, s, s + d)) : 0), 0);
 
   // ---------------------------------------------------------------- background
@@ -549,7 +564,7 @@
   // Act A ---------------------------------------------------------
   function actA(ctx, t) {
     const warn = warnAt(t);
-    const mood = t < 5.9 ? 'smile' : t < 9.85 ? 'calm' : 'flat';
+    const mood = t < LS('l2') ? 'smile' : t < LS('l3') - 0.05 ? 'calm' : 'flat';
     drawChat(ctx, t, {
       ...WIN, msgs: A_MSGS, mood, border: warn > 0.05 ? rgba(COL.warn, 0.25 + 0.5 * warn) : null,
     });
@@ -598,7 +613,7 @@
     // the angry bubbles take over
     for (const f of FLOATERS) {
       if (t < f.t) continue;
-      const k = eBack(prog(t, f.t, f.t + 0.32)), grow = 1 + 0.3 * prog(t, f.t, 12.1);
+      const k = eBack(prog(t, f.t, f.t + 0.32)), grow = 1 + 0.3 * prog(t, f.t, ACTS.A[1]);
       const m = { kind: 'angry', side: 'user', text: f.text, seed: Math.round(f.t * 100) };
       const L = layout(ctx, m, 900);
       ctx.save(); ctx.translate(f.x, f.y); ctx.rotate(f.r); ctx.scale(f.s * k * grow, f.s * k * grow);
@@ -742,6 +757,7 @@
           ctx.beginPath(); ctx.arc(540, 720, 118 + eOut(rk) * 260, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
         }
       }
+      ctx.restore();
     }
     if (t >= C.swap) {
       const nk = eOut(prog(t, C.swap + 0.15, C.swap + 0.6));
@@ -813,7 +829,7 @@
     const sy = ck < 0.55 ? lerp(1, 0.012, eInOut(ck / 0.55)) : 0.012;
     const sx = ck < 0.55 ? 1 : lerp(1, 0, eInOut((ck - 0.55) / 0.45));
     const warn = warnAt(t);
-    const mood = t < 40.7 ? 'smile' : t < E.bye ? 'flat' : 'calm';
+    const mood = t < LS('l9') ? 'smile' : t < E.bye ? 'flat' : 'calm';
     ctx.save();
     ctx.translate(540, WIN.y + WIN.h / 2); ctx.scale(sx, sy); ctx.translate(-540, -(WIN.y + WIN.h / 2));
     if (ck > 0) { ctx.globalAlpha *= 1 - prog(ck, 0.8, 1); }
@@ -863,15 +879,15 @@
 
   // ---------------------------------------------------------------- headlines (on-screen text)
   const HEADS = [
-    { s: 0.15, e: 5.75, lines: [{ at: 0.15, parts: [['Insult it ', COL.text], ['for free?', COL.accent]] }] },
-    { s: WT('l2', 'apologize') + 0.1, e: 9.8, lines: [{ at: WT('l2', 'apologize') + 0.1, parts: [['“Sorry.', COL.text]] }, { at: WT('l2', 'calm') + 0.05, parts: [['Let’s calm down.”', COL.text]] }] },
-    { s: 9.9, e: 12.05, glitch: true, lines: [{ at: 9.9, parts: [['That’s changing', COL.warn]] }] },
-    { s: B.tR - 0.1, e: 19.95, lines: [{ at: B.tR - 0.1, parts: [['Rare, ', COL.text], ['extreme', COL.warn], [' cases', COL.text]] }] },
-    { s: 20.3, e: 25.35, lines: [{ at: 20.3, parts: [['Tries to ', COL.text], ['redirect', COL.hl], [' first', COL.text]] }] },
-    { s: 25.7, e: 31.95, lines: [{ at: 25.7, parts: [['Not a ban.', COL.text]] }, { at: C.newShow, parts: [['Start a ', COL.text], ['new chat.', COL.accent]] }] },
-    { s: WT('l7', 'part'), e: 35.7, lines: [{ at: WT('l7', 'part'), parts: [['Part of ', COL.text], ['AI welfare', COL.accent]] }, { at: WT('l7', 'research'), parts: [['research', COL.text]] }] },
-    { s: WT('l8', 'once'), e: 40.5, lines: [{ at: WT('l8', 'once'), parts: [['Once or twice? ', COL.text], ['Fine.', COL.accent]] }] },
-    { s: E.bye - 0.05, e: 44.45, lines: [{ at: E.bye - 0.05, parts: [['Goodbye 👋', COL.text]] }] },
+    { s: 0.15, e: LS('l2') + 0.05, lines: [{ at: 0.15, parts: [['Insult it ', COL.text], ['for free?', COL.accent]] }] },
+    { s: WT('l2', 'apologize') + 0.1, e: LS('l3') - 0.05, lines: [{ at: WT('l2', 'apologize') + 0.1, parts: [['“Sorry.', COL.text]] }, { at: WT('l2', 'calm') + 0.05, parts: [['Let’s calm down.”', COL.text]] }] },
+    { s: LS('l3'), e: ACTS.A[1] - 0.05, glitch: true, lines: [{ at: LS('l3'), parts: [['That’s changing', COL.warn]] }] },
+    { s: B.tR - 0.1, e: ACTS.B[1] - 0.05, lines: [{ at: B.tR - 0.1, parts: [['Rare, ', COL.text], ['extreme', COL.warn], [' cases', COL.text]] }] },
+    { s: LS('l5') + 0.1, e: LE('l5') + 0.25, lines: [{ at: LS('l5') + 0.1, parts: [['Tries to ', COL.text], ['redirect', COL.hl], [' first', COL.text]] }] },
+    { s: LE('l5') + 0.3, e: ACTS.C[1] - 0.05, lines: [{ at: LE('l5') + 0.3, parts: [['Not a ban.', COL.text]] }, { at: C.newShow, parts: [['Start a ', COL.text], ['new chat.', COL.accent]] }] },
+    { s: WT('l7', 'part'), e: ACTS.D[1] - 0.1, lines: [{ at: WT('l7', 'part'), parts: [['Part of ', COL.text], ['AI welfare', COL.accent]] }, { at: WT('l7', 'research'), parts: [['research', COL.text]] }] },
+    { s: WT('l8', 'once'), e: LS('l9') - 0.2, lines: [{ at: WT('l8', 'once'), parts: [['Once or twice? ', COL.text], ['Fine.', COL.accent]] }] },
+    { s: E.bye - 0.05, e: ACTS.E[1] - 0.05, lines: [{ at: E.bye - 0.05, parts: [['Goodbye 👋', COL.text]] }] },
   ];
   function drawHeads(ctx, t) {
     for (const h of HEADS) {
@@ -995,5 +1011,73 @@
   const srt = () => CHUNKS.map((c, i) => `${i + 1}\n${fmt(c.s)} --> ${fmt(c.e)}\n${c.words.map(w => w.w).join(' ')}\n`).join('\n');
   const voScript = () => VO.map(l => `${fmt(l.s)} – ${fmt(l.e)}  ${l.text.replace(/\|/g, ' ')}`).join('\n');
 
-  global.SHORT = { W, H, FPS, DURATION, CONFIG, VO, SFX, render, srt, voScript };
+  // Everything the After Effects builder needs, measured with the real fonts.
+  function exportData(ctx) {
+    const EMOJI = /\s*(\p{Extended_Pictographic})\s*$/u;
+    const maxW = (WIN.w - 56) * 0.8;
+    const msg = m => {
+      const L = layout(ctx, m, maxW);
+      const o = { side: m.side, kind: m.kind, t: m.t, until: m.until, badge: m.badge, burst: !!m.burst, seed: m.seed, w: L.w, h: L.h, lh: L.lh, lines: L.lines.slice() };
+      const last = o.lines.length - 1;
+      const em = last >= 0 && o.lines[last].match(EMOJI);
+      if (em) {
+        o.emoji = em[1];
+        o.lines[last] = o.lines[last].replace(EMOJI, '');
+        ctx.save(); ctx.font = bubbleFont(m); o.emojiX = ctx.measureText(o.lines[last] + ' ').width; ctx.restore();
+      }
+      return o;
+    };
+    const heads = HEADS.map(h => ({
+      s: h.s, e: h.e, glitch: !!h.glitch,
+      lines: h.lines.map((ln, li) => {
+        const words = [];
+        ln.parts.forEach(([txt, col]) => txt.split(' ').filter(Boolean).forEach(w => words.push([w, col])));
+        let size = 80, tw;
+        const measure = () => { ctx.font = FONT(900, size); return words.reduce((s, [w]) => s + ctx.measureText(w).width, 0) + size * 0.27 * (words.length - 1); };
+        tw = measure(); while (tw > 960) { size -= 4; tw = measure(); }
+        let x = 540 - tw / 2;
+        const out = words.map(([w, col]) => {
+          const em = w.match(/^(\p{Extended_Pictographic})$/u);
+          const ww = ctx.measureText(w).width; const o = { w, col, x, width: ww, emoji: !!em }; x += ww + size * 0.27; return o;
+        });
+        return { at: ln.at, y: h.lines.length === 1 ? 312 : 266 + li * 96, size, words: out };
+      }),
+    }));
+    ctx.save(); ctx.font = FONT(900, 94);
+    const subs = CHUNKS.map(c => {
+      const space = 94 * 0.27;
+      const ws = c.words.map(w => ({ w: w.w, s: w.s, e: w.e, width: ctx.measureText(w.w).width }));
+      const total = ws.reduce((s, w) => s + w.width, 0) + space * (ws.length - 1);
+      let rows = [ws];
+      if (total > 980) {
+        let best = 1, bestD = Infinity;
+        for (let i = 1; i < ws.length; i++) {
+          const l = ws.slice(0, i).reduce((s, w) => s + w.width + space, -space), r = ws.slice(i).reduce((s, w) => s + w.width + space, -space);
+          if (Math.max(l, r) < bestD) { bestD = Math.max(l, r); best = i; }
+        }
+        rows = [ws.slice(0, best), ws.slice(best)];
+      }
+      rows.forEach((row, ri) => {
+        const rw = row.reduce((s, w) => s + w.width + space, -space); let x = 540 - rw / 2;
+        for (const w of row) { w.x = x; w.y = SUB_Y + (ri - (rows.length - 1) / 2) * 108; x += w.width + space; }
+      });
+      return { s: c.s, e: c.e, words: ws };
+    });
+    ctx.restore();
+    const sample = (f, a, b, step = 1 / 15) => { const r = []; for (let t = a; t <= b + 1e-6; t += step) r.push([+t.toFixed(3), +f(t).toFixed(4)]); return r; };
+    return {
+      W, H, FPS, DURATION, COL, WIN, CONFIG, ACTS, FIST_T,
+      VO: VO.map(l => ({ id: l.id, s: l.s, e: l.e, text: l.text.replace(/\|/g, ' ') })),
+      A_MSGS: A_MSGS.map(msg), C_MSGS: C_MSGS.map(msg), C_NEW: C_NEW.map(msg), E_MSGS: E_MSGS.map(msg),
+      FLOATERS: FLOATERS.map(f => ({ ...f, ...(() => { const L = layout(ctx, { kind: 'angry', text: f.text }, 900); return { w: L.w, h: L.h }; })() })),
+      B: { ...B, fill: undefined, fillCurve: sample(B.fill, B.tR - 0.4, ACTS.B[1]) }, C, E,
+      GLITCHES, IMPULSES, SFX, heads, subs,
+      warn: sample(warnAt, 0, DURATION),
+      L7: WT('l7', 'anthropic'),
+      channel: (() => { let size = 100; ctx.font = FONT(900, size); while (ctx.measureText(CONFIG.channel).width > 940 && size > 40) { size -= 4; ctx.font = FONT(900, size); } return { text: CONFIG.channel, size, width: ctx.measureText(CONFIG.channel).width }; })(),
+      LS: Object.fromEntries(VO.map(l => [l.id, l.s])), LE: Object.fromEntries(VO.map(l => [l.id, l.e])),
+    };
+  }
+
+  global.SHORT = { W, H, FPS, DURATION, CONFIG, VO, SFX, ACTS, render, srt, voScript, exportData };
 })(typeof window !== 'undefined' ? window : globalThis);
