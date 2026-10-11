@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Ends Chat — Short</title>
+<style>
+  @font-face { font-family: InterX; font-weight: 600; src: url(fonts/Inter-SemiBold.otf); }
+  @font-face { font-family: InterX; font-weight: 700; src: url(fonts/Inter-Bold.otf); }
+  @font-face { font-family: InterX; font-weight: 800; src: url(fonts/InterDisplay-ExtraBold.otf); }
+  @font-face { font-family: InterX; font-weight: 900; src: url(fonts/InterDisplay-Black.otf); }
+  :root { --bg: #070A16; --fg: #E8ECF8; --muted: #8C96B4; --accent: #3DDCFF; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font-family: InterX, system-ui, sans-serif; }
+  body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 12px 16px; box-sizing: border-box; }
+  .stage { position: relative; height: calc(100vh - 90px); aspect-ratio: 9 / 16; max-width: 100%; }
+  canvas { width: 100%; height: 100%; border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,.6); display: block; }
+  .safe { position: absolute; inset: 0; pointer-events: none; display: none; border-radius: 14px; overflow: hidden; }
+  .safe.on { display: block; }
+  .safe i { position: absolute; left: 0; right: 0; background: repeating-linear-gradient(45deg, rgba(255,77,94,.25) 0 10px, rgba(255,77,94,.1) 10px 20px); }
+  .safe .top { top: 0; height: 10%; } .safe .bot { bottom: 0; height: 20%; }
+  .safe .subs { top: 52.08%; height: 23.44%; background: none; outline: 2px dashed rgba(255,217,61,.6); }
+  .bar { display: flex; align-items: center; gap: 10px; width: min(560px, 100%); }
+  button { font: 700 14px InterX, system-ui; background: #1A2142; color: var(--fg); border: 1px solid #2A3360; border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+  button:hover { border-color: var(--accent); }
+  input[type=range] { flex: 1; accent-color: var(--accent); }
+  .time { font: 600 13px ui-monospace, monospace; color: var(--muted); min-width: 92px; text-align: right; }
+  body.render { padding: 0; display: block; }
+  body.render .bar, body.render .safe { display: none !important; }
+  body.render .stage { height: auto; width: 1080px; }
+  body.render canvas { border-radius: 0; box-shadow: none; width: 1080px; height: 1920px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <canvas id="c" width="1080" height="1920"></canvas>
+  <div class="safe" id="safe"><i class="top"></i><i class="subs"></i><i class="bot"></i></div>
+</div>
+<div class="bar">
+  <button id="play">Play</button>
+  <input id="seek" type="range" min="0" max="47.5" step="0.01" value="0">
+  <span class="time" id="time">0.00 s</span>
+  <button id="zones" title="YouTube UI safe zones">Zones</button>
+</div>
+<script src="scene.js"></script>
+<script>
+(async () => {
+  const S = window.SHORT, cv = document.getElementById('c'), ctx = cv.getContext('2d');
+  const params = new URLSearchParams(location.search);
+  await Promise.all([600, 700, 800, 900].map(w => document.fonts.load(`${w} 40px InterX`)));
+  await document.fonts.load('40px "Noto Color Emoji"').catch(() => {});
+  if (params.has('render')) {
+    document.body.classList.add('render');
+    window.renderFrame = t => { S.render(ctx, t); };
+    window.SHORT_READY = true;
+    return;
+  }
+  const seek = document.getElementById('seek'), time = document.getElementById('time'), play = document.getElementById('play');
+  seek.max = S.DURATION;
+  let t = +(params.get('t') || 0), playing = false, last = 0;
+  const draw = () => { S.render(ctx, t); seek.value = t; time.textContent = t.toFixed(2) + ' s'; };
+  const loop = now => {
+    if (!playing) return;
+    t += (now - last) / 1000; last = now;
+    if (t >= S.DURATION) t = 0;
+    draw(); requestAnimationFrame(loop);
+  };
+  const toggle = () => {
+    playing = !playing; play.textContent = playing ? 'Pause' : 'Play';
+    if (playing) { last = performance.now(); requestAnimationFrame(loop); }
+  };
+  play.onclick = toggle;
+  seek.oninput = () => { t = +seek.value; draw(); };
+  document.getElementById('zones').onclick = () => document.getElementById('safe').classList.toggle('on');
+  addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') { t = Math.min(S.DURATION, t + 1 / S.FPS); draw(); }
+    if (e.code === 'ArrowLeft') { t = Math.max(0, t - 1 / S.FPS); draw(); }
+  });
+  draw();
+})();
+</script>
+</body>
+</html>
