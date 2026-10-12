@@ -1,0 +1,11 @@
+newmtl Crab
+Ka 0 0 0
+Kd 0.843 0.467 0.341
+Ks 0.1 0.1 0.1
+Ns 20
+
+newmtl Eye
+Ka 0 0 0
+Kd 0.02 0.02 0.02
+Ks 0.5 0.5 0.5
+Ns 80
